@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta tags for character set and title -->
+    <meta charset="UTF-8" />
+    <title>Seating Arrangement Form</title>
+
+    <!-- Link to external stylesheet for styling -->
+    <link rel="stylesheet" type="text/css" href="/static/styles.css" />
+
+    <!-- Internal style for keyframe animation -->
+    <style>
+      @keyframes breathingColor {
+        0% { color: rgb(255, 0, 0); }
+        50% { color: rgb(0, 255, 0); }
+        100% { color: rgb(0, 0, 255); }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Logout button at the upper left corner -->
+    <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+
+    <!-- Main container -->
+    <div class="container">
+      <!-- University logo with a link -->
+      <a href="https://www.unishivaji.ac.in/" target="_blank">
+        <img src="/static/university_logo.png" alt="University Logo" class="center" />
+      </a>
+
+      <!-- Centered text with breathing effect -->
+      <div class="center-text">
+        <!-- Use semantic HTML element for better structure -->
+        <h1 id="typingEffect" class="center breathing-effect"></h1>
+      </div>
+
+      <!-- Form for seating arrangement -->
+      <form id="seatingForm" action="/generate-pdf" method="post" class="center">
+        <!-- Top section -->
+        <div class="top-section">
+          <!-- Seating Arrangement SEE input fields -->
+          <label for="see">Seating Arrangement SEE:</label>
+          <div style="display: flex">
+            <!-- Simplified input fields with appropriate labels -->
+            <input type="text" id="seeBefore" name="seeBefore" required />
+            <input type="text" id="seeStatic" name="seeStatic" value="to be held in" readonly style="text-align: center;" />
+            <input type="text" id="seeAfter" name="seeAfter" required />
+          </div>
+          
+          <!-- Date, Day, Exam Start and End Time -->
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required />
+          <label for="day">Day:</label>
+          <!-- Use the "select" element for a dropdown with days of the week -->
+          <select id="day" name="day">
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="saturday">Saturday</option>
+          </select>
+
+          <!-- Use a div for the time-section for better styling -->
+          <div class="time-section">
+            <label for="startTime">Exam Start Time:</label>
+            <input type="time" id="startTime" name="startTime" required />
+            <label for="endTime">Exam End Time:</label>
+            <input type="time" id="endTime" name="endTime" required />
+          </div>
+        </div>
+
+        <!-- Mid-section -->
+        <div class="mid-section">
+          <!-- Left section inputs -->
+          <div class="left-section">
+            <!-- Use appropriate labels for input fields -->
+            <label for="yearCourseCode">Year and Course Code:</label>
+            <input type="text" id="yearCourseCode" name="yearCourseCode" required />
+            <label for="roomNo">Room No:</label>
+            <input type="text" id="roomNo" name="roomNo" required />
+            <label for="branch">Branch:</label>
+            <input type="text" id="branch" name="branch" required />
+          </div>
+
+          <!-- Right section inputs -->
+          <div class="right-section">
+            <!-- Use appropriate labels for input fields -->
+            <label for="subject">Sub:</label>
+            <input type="text" id="subject" name="subject" required />
+            <label for="seatNo">Seat No:</label>
+            <input type="text" id="seatNo" name="seatNo" required />
+            <label for="total">Total:</label>
+            <input type="text" id="total" name="total" placeholder="Total Seats" />
+          </div>
+        </div>
+
+        <!-- Table for Bench No and Seat No -->
+        <table id="seatTable">
+          <thead>
+            <tr>
+              <th>Bench No</th>
+              <th>Seat No</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- JavaScript will inject seat numbers here -->
+          </tbody>
+        </table>
+
+        <!-- Buttons for adding, deleting seats and generating PDF -->
+        <button type="button" id="addSeats">Add Seats</button>
+        <button type="button" id="deleteSeatsToggle">Delete Seat</button>
+        <button type="submit" id="generatePdf">Generate PDF</button>
+      </form>
+    </div>
+
+    <!-- JavaScript file for dynamic functionality -->
+    <script src="/static/script.js"></script>
+  </body>
+</html>

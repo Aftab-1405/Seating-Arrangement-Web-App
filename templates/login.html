@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta tags for character set, compatibility, and viewport -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Link to external stylesheet for styling -->
+    <link rel="stylesheet" href="/static/Authentication.css" />
+
+    <!-- Link to external script.js file for additional functionality -->
+    <script src="/static/script.js"></script>
+
+    <!-- Title of the HTML page -->
+    <title>Login</title>
+  </head>
+
+  <body class="container">
+    <!-- Main page content -->
+    <div class="page">
+      <!-- Container for the login box -->
+      <div class="box">
+        <!-- Container for the login content -->
+        <div class="box-login">
+          <!-- Heading for the login box -->
+          <h1 class="top-header">LOG IN</h1>
+
+          <!-- Form for user login -->
+          <form method="POST" action="" class="input-group">
+            <!-- Hidden fields for the form (e.g., CSRF protection) -->
+            {{ form.hidden_tag() }}
+
+            <!-- Input field for username -->
+            <div class="input-field">
+              <label for="username">Username</label>
+              <input
+                type="e"
+                id="username"
+                name="username"
+                placeholder="Username"
+                required
+              />
+            </div>
+
+            <!-- Input field for password with show/hide functionality -->
+            <div class="input-field">
+              <label for="loginPassword">Password</label>
+              <div>
+                <input
+                  type="password"
+                  id="loginPassword"
+                  name="password"
+                  placeholder="Password"
+                  required
+                />
+                <!-- Checkbox to toggle the password visibility -->
+                <input
+                  type="checkbox"
+                  onclick="togglePasswordVisibility('loginPassword', event)"
+                />
+                <label>Show Password</label>
+              </div>
+            </div>
+
+            <!-- Submit button for the form with onclick effect -->
+            <input
+              type="submit"
+              value="Submit"
+              class="input-submit"
+              onclick="buttonClickEffect(this)"
+            />
+          </form>
+
+          <!-- Link to the registration page for users without an account -->
+          <a href="{{ url_for('register') }}" class="link">
+            Don't have an account? Sign Up
+          </a>
+        </div>
+      </div>
+
+      <!-- JavaScript for Button Click Effect -->
+      <script>
+        // Function for button click effect
+        function buttonClickEffect(button) {
+          // Add "clicked" class to the clicked button
+          button.classList.add("clicked");
+
+          // Remove "clicked" class after a delay
+          setTimeout(function () {
+            button.classList.remove("clicked");
+          }, 300);
+        }
+      </script>
+
+      <!-- JavaScript for toggling password visibility -->
+      <script>
+        // Function to toggle password visibility using checkboxes
+        function togglePasswordVisibility(id, event) {
+          // Prevent the default checkbox behavior
+          event.preventDefault();
+
+          // Get the password input element by ID
+          const passwordInput = document.getElementById(id);
+
+          // Toggle the input type between "password" and "text"
+          passwordInput.type =
+            passwordInput.type === "password" ? "text" : "password";
+
+          // Add "clicked" class to provide visual feedback
+          passwordInput.classList.add("clicked");
+
+          // Remove "clicked" class after a delay
+          setTimeout(() => passwordInput.classList.remove("clicked"), 300);
+
+          // Return false to prevent the checkbox from being checked/unchecked
+          return false;
+        }
+      </script>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Meta tags for character set, compatibility, and viewport -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="/static/Authentication.css" />
+
+    <!-- Title of the HTML page -->
+    <title>Home</title>
+  </head>
+
+  <body class="container">
+    <!-- Main page content -->
+    <div class="page">
+      <!-- Page heading -->
+      <h1>
+        Welcome to the Seating Arrangement App by 
+        <span class="rgb-effect">ABN Group</span>
+      </h1>
+      <hr />
+
+      <!-- Container for buttons -->
+      <div class="button-container">
+        <!-- Link to login page with onclick effect -->
+        <a
+          href="{{ url_for('login') }}"
+          class="link button"
+          onclick="buttonClickEffect(this)"
+          >Login Page</a
+        >
+        
+        <!-- Link to register page with onclick effect -->
+        <a
+          href="{{ url_for('register') }}"
+          class="link button"
+          onclick="buttonClickEffect(this)"
+          >Register Page</a
+        >
+      </div>
+
+      <br />
+
+      <!-- CSS for Flexbox Layout moved to the head for better organization -->
+      <style>
+        .image-row {
+          display: flex;
+          justify-content: space-around;
+          flex-wrap: wrap;
+        }
+      </style>
+
+      <!-- Image Row -->
+      <div class="image-row">
+        <!-- Responsive Image Gallery -->
+        <!-- Each gallery item is enclosed in a responsive div -->
+        <div class="responsive">
+          <div class="gallery">
+            <a target="_blank" href="https://www.linkedin.com/in/sumitkamble7">
+              <h3>Sumit Kamble</h3>
+              <img
+                src="/static/Sumit-Saheb.png"
+                alt="Sumit Kamble"
+                width="300"
+                height="200"
+              />
+            </a>
+            <div class="desc"><b>Back-End Developer</b></br>Department of Technology</div>
+          </div>
+        </div>
+
+        <div class="responsive">
+          <div class="gallery">
+            <a target="_blank" href="">
+              <h3>Omkar Pharande</h3>
+              <img
+                src="/static/Omkar.jpg"
+                alt="Sumit Kamble"
+                width="300"
+                height="200"
+              />
+            </a>
+            <div class="desc"><b>Technical Support</b></br>Department of Technology</div>
+          </div>
+        </div>
+
+        <div class="responsive">
+          <div class="gallery">
+            <a target="_blank" href="https://aftab-1405.github.io/Aftab-Nadaf/">
+              <h3>Aftab Nadaf</h3>
+              <img
+                src="/static/Aftab-Nadaf.jpg"
+                alt="Aftab Nadaf"
+                width="300"
+                height="200"
+              />
+            </a>
+            <div class="desc"><b>Java Developer</b></br>Department of Technology</div>
+          </div>
+        </div>
+
+        <div class="responsive">
+          <div class="gallery">
+            <a target="_blank" href="">
+              <h3>Manisha Gore</h3>
+              <img
+                src="/static/Manisha-Gore.jpg"
+                alt="Manisha Gore"
+                width="300"
+                height="200"
+              />
+            </a>
+            <div class="desc"><b>Front-End Developer</b></br>Department of Technology</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JavaScript for Button Click Effect -->
+      <script>
+        function buttonClickEffect(link) {
+          // Add "clicked" class to the clicked button
+          link.classList.add("clicked");
+
+          // Remove "clicked" class after a delay
+          setTimeout(function () {
+            link.classList.remove("clicked");
+          }, 300);
+        }
+      </script>
+    </div>
+  </body>
+</html>
