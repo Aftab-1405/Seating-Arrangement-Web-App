@@ -14,51 +14,55 @@ Step-by-Step Documentation:
     11. Run the application if executed as the main script.
 
 """
-
-from flask import Flask, render_template, request, send_file, url_for, redirect
-from fpdf import FPDF
+from flask import Flask, render_template, request, send_file, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
-from flask import flash 
+import os
+from fpdf import FPDF
+
+# Load configuration from environment variables
+DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///database.db')
+SECRET_KEY = os.getenv('SECRET_KEY', 'AFTAB@1405')
 
 # Initialize Flask application
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'AFTAB@1405'
-db = SQLAlchemy()
-db.init_app(app)
+app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SQLALCHEMY_POOL_SIZE'] = 10  # Adjust pool size as necessary
+
+db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+# User Loader
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# User Model
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
-    
-# VERY IMPORTANT
+
+# Database initialization
 with app.app_context():
     db.create_all()
-    
+
+# Register Form
 class RegisterForm(FlaskForm):
-    # Registration form with validators and placeholders
     username = StringField(validators=[InputRequired(), Length(min=4, max=50)],
                         render_kw={"placeholder": "Username"})
-
     password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)],
-                            render_kw={"placeholder": "Password"})
-
+                        render_kw={"placeholder": "Password"})
     submit = SubmitField('Register')
 
     def validate_username(self, username):
@@ -66,54 +70,45 @@ class RegisterForm(FlaskForm):
         if existing_user_username:
             raise ValidationError('That username already exists. Please choose a different one.')
 
+# Login Form
 class LoginForm(FlaskForm):
-    # Login form with validators and placeholders
     username = StringField(validators=[InputRequired(), Length(min=8, max=50)],
                         render_kw={"placeholder": "Username"})
-
     password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)],
-                            render_kw={"placeholder": "Password"})
-
+                        render_kw={"placeholder": "Password"})
     submit = SubmitField('Login')
 
+# Routes
 @app.route('/')
 def home():
-    # Render the home page
     return render_template('home.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # Handle login page with validation and redirection
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
-            flash('Successfully logged in')
             return redirect(url_for('index'))
-        else:
-            flash('Invalid username or password')
     return render_template('login.html', form=form)
 
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    # Render the index page, accessible only to logged-in users
     return render_template('index.html')
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
-    # Handle logout and redirect to the login page
     logout_user()
     return redirect(url_for('login'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    # Handle user registration and redirection
     form = RegisterForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data)
+        hashed_password = bcrypt.generate_password_hash(form.password.data, rounds=12)  # Adjust rounds for performance/security
         new_user = User(username=form.username.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
